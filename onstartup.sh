@@ -1,4 +1,7 @@
 #!/bin/bash
+
+DIRECTORY="$(readlink -f "$(dirname "$0")")"
+
 output="$(sudo apt update 2>&1)"
 exitcode=$?
 
@@ -12,7 +15,7 @@ fi
 LIST="$(apt list --upgradable 2>/dev/null | cut -d/ -f 1 | tail -n +2)"
 
 echo -e "$LIST" | yad --center --title='Update Buddy' --width=310 --height=300 --no-headers \
-  --list --separator='\n' --window-icon="${DIRECTORY}/icons/logo.png" \
+  --list --separator='\n' --window-icon="${DIRECTORY}/logo.png" \
   --text='These packages can be upgraded:' \
   --column=Package \
   --button='Cancel'!"${DIRECTORY}/icons/exit.png"!:1 \
