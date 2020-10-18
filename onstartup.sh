@@ -25,7 +25,7 @@ while true;do
     --button='Update now'!"${DIRECTORY}/icons/download.png":0 \
     2>/dev/null || update=0
   
-  if [ $update == 0 ];then
+  if [ $update == 1 ];then
     lxterminal --title='Upgrading packages' -e 'sudo apt -y full-upgrade;echo "Closing in 10 seconds.";sleep 10'
   fi
   sleep 6h
