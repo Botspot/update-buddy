@@ -9,16 +9,31 @@ while true;do
   exitcode=$?
   
   #inform user packages are upgradeable
-  if [ -z "$(echo "$output" | grep 'packages can be upgraded' )" ];then
+  if [ -z "$(echo "$output" | grep 'can be upgraded' )" ];then
+    update=0
+  elif [ $exitcode != 0 ];then
     update=0
   fi
   #only continue script if upgrades available
   
-  
   LIST="$(apt list --upgradable 2>/dev/null | cut -d/ -f 1 | tail -n +2)"
   
   if [ $update == 1 ];then
-    echo -e "$LIST" | yad --center --title='Update Buddy' --width=310 --height=300 --no-headers \
+    screen_width="$(xdpyinfo | grep 'dimensions:' | tr 'x' '\n' | tr ' ' '\n' | sed -n 7p)"
+    screen_height="$(xdpyinfo | grep 'dimensions:' | tr 'x' '\n' | tr ' ' '\n' | sed -n 8p)"
+    
+    yad --form --text='Update Buddy:
+APT updates available.' \
+      --on-top --skip-taskbar --undecorated --close-on-unfocus \
+      --geometry=260+$((screen_width-262))+$((screen_height-150)) \
+      --image="${DIRECTORY}/logo.png" \
+      --button="Details!${DIRECTORY}/icons/info.png":0 \
+      --button="Later!${DIRECTORY}/icons/exit.png":1 \
+      2>/dev/null || update=0
+  fi
+  
+  if [ $update == 1 ];then
+    echo -e "$LIST" | yad --center --title='Update Buddy' --width=310 --height=300 --no-headers --no-selection \
       --list --separator='\n' --window-icon="${DIRECTORY}/logo.png" \
       --text='These packages can be upgraded:' \
       --column=Package \
@@ -28,7 +43,9 @@ while true;do
   fi
   
   if [ $update == 1 ];then
-    lxterminal --title='Upgrading packages' -e 'sudo apt -y full-upgrade;echo "Closing in 10 seconds.";sleep 10'
+    "${DIRECTORY}/terminal-run" 'sudo apt -y full-upgrade --allow-downgrades;echo "Closing in 10 seconds.";sleep 10' 'Upgrading packages'
   fi
-  sleep 6h
+  
+  echo "Waiting 12 hours"
+  sleep 12h
 done
