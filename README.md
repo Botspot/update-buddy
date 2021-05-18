@@ -1,7 +1,9 @@
 # update-buddy
 Automatically check for updates on boot. If there are any, asks permission to upgrade.  
-[![badge](https://github.com/Botspot/pi-apps/blob/master/icons/badge.png?raw=true)](https://github.com/Botspot/pi-apps)
+![screenshot](https://github.com/Botspot/update-buddy/blob/main/screenshot.png?raw=true)
 # To install:
+[![badge](https://github.com/Botspot/pi-apps/blob/master/icons/badge.png?raw=true)](https://github.com/Botspot/pi-apps)
+Or, to install manually:
 ```
 sudo apt install yad
 git clone https://github.com/Botspot/update-buddy
