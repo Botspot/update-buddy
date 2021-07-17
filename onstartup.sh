@@ -16,7 +16,11 @@ while true;do
   fi
   #only continue script if upgrades available
   
-  LIST="$(apt list --upgradable 2>/dev/null | cut -d/ -f 1 | tail -n +2)"
+  LIST="$(apt list --upgradable 2>/dev/null | cut -d/ -f 1 | tail -n +2 | grep -vx "$(dpkg --get-selections | grep "\<hold$" | tr -d ' \t' | sed 's/hold//g' | sed -z 's/\n/\\|/g' | sed -z 's/\\|$/\n/g')")"
+  
+  if [ -z "$LIST" ];then
+    update=0
+  fi
   
   if [ $update == 1 ];then
     screen_width="$(xdpyinfo | grep 'dimensions:' | tr 'x' '\n' | tr ' ' '\n' | sed -n 7p)"
