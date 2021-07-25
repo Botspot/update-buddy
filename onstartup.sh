@@ -50,6 +50,6 @@ APT updates available.' \
     "${DIRECTORY}/terminal-run" 'sudo apt -y full-upgrade --allow-downgrades;echo "Closing in 10 seconds.";sleep 10' 'Upgrading packages'
   fi
   
-  echo "Waiting 12 hours"
+  #echo "Waiting 12 hours"
   sleep 12h
 done
