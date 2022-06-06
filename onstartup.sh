@@ -2,6 +2,21 @@
 
 DIRECTORY="$(readlink -f "$(dirname "$0")")"
 
+#From pi-apps add_englich function
+if [ "$(cat /usr/share/i18n/SUPPORTED | grep -o 'en_US.UTF-8' )" == "en_US.UTF-8" ]; then
+  locale=$(locale -a | grep -oF 'en_US.utf8')
+  if [ "$locale" != 'en_US.utf8' ]; then
+    status "Adding en_US locale for better logging... "
+    sudo sed -i '/en_US.UTF-8/s/^#[ ]//g' /etc/locale.gen
+    sudo locale-gen
+  fi
+else
+    warning "en_US locale is not available on your system. This may cause bad logging experience."
+fi
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 while true;do
   update=1
   
