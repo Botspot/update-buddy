@@ -19,12 +19,20 @@ export LC_ALL="en_US.UTF-8"
 
 while true;do
   update=1
-  
-  output="$(sudo apt update 2>&1)"
-  exitcode=$?
+
+  while true;do
+    output="$(sudo apt update 2>&1)"
+    exitcode=$?
+    if ! echo "$output" | grep -q 'Temporary failure resolving' ;then
+      break
+    elif [ $exitcode != 0 ];then
+      break
+    fi
+    sleep 5m
+  done
   
   #inform user packages are upgradeable
-  if [ -z "$(echo "$output" | grep 'can be upgraded' )" ];then
+  if ! echo "$output" | grep -q 'can be upgraded' ;then
     update=0
   elif [ $exitcode != 0 ];then
     update=0
