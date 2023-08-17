@@ -20,6 +20,7 @@ export LC_ALL="en_US.UTF-8"
 while true;do
   update=1
 
+  failwait=1
   while true;do
     output="$(sudo apt update 2>&1)"
     exitcode=$?
@@ -28,7 +29,8 @@ while true;do
     elif [ $exitcode != 0 ];then
       break
     fi
-    sleep 5m
+    sleep "${failwait}m"
+    failwait=$((failwait*2)) #exponential retry: 1m, 2m, 4m, 8m, 16m...
   done
   
   #inform user packages are upgradeable
